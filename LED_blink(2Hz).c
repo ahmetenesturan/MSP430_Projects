@@ -2,10 +2,17 @@
 
 // Blinks the LED in P1.0 every 0.5 seconds
 
+//warning #10420-D: For FRAM devices, at start up, 
+//the GPIO power-on default high-impedance mode needs 
+//to be disabled to activate previously configured port settings. 
+//This can be done by clearing the LOCKLPM5 bit in PM5CTL0 register.
+
 int main(void)
 {
 	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
-	
+	PM5CTL0 &= ~LOCKLPM5;       // Disable the GPIO power-on default high-impedance mode
+                                // to activate previously configured port settings
+
 	P1DIR |= 0x01; // set P1.0 as output
 	P1OUT &= ~0x01; // toggle off LED
 
